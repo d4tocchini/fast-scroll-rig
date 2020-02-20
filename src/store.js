@@ -6,7 +6,7 @@ const state = {
   pages: 8,
   zoom: 75,
   colors: {
-    clear: [253,227,227],
+    clear: [253,227,226],
   },
   stripes: [
     { offset: 0, color: "#4ad7d7", height: 13 },
