@@ -15,7 +15,7 @@ const child_idx = 6;
 const dummy = new Object3D()
 export default function Diamonds() {
   const gltf = useLoader(GLTFLoader,
-    "/piggy_bank/scene.gltf")
+    "./piggy_bank/scene.gltf")
     // "/simple_japanese_tree/scene.gltf")
     // "/diamond.glb")
   useMemo(function () {
