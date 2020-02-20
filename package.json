@@ -4,7 +4,7 @@
   "description": "",
   "keywords": [],
   "main": "src/index.js",
-  "homepage": "https://d4tocchini.github.io/fast-scroll-rig/build",
+  "homepage": ".",
   "dependencies": {
     "lerp": "1.0.3",
     "react": "experimental",
