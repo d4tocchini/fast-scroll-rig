@@ -1,9 +1,8 @@
-import { ShaderMaterial, BackSide } from "three"
+const { ShaderMaterial, BackSide } = global.THREE
 
 export default class BackfaceMaterial extends ShaderMaterial {
   constructor() {
     super({
-
       vertexShader: `
       varying vec3 worldNormal;
       void main() {

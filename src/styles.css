@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Sulphur+Point&display=swap');
+/* @import url('https://fonts.googleapis.com/css?family=Sulphur+Point&display=swap'); */
 
 *,
 *::after,
@@ -21,7 +21,7 @@ body {
   padding: 0;
   background: var(--clr_bg);
   overflow: hidden;
-  font-family: 'Sulphur Point', sans-serif;
+  font-family: 'Georgia', sans-serif;
   color: #8b8b8b;
   font-size: 0.9rem;
 }

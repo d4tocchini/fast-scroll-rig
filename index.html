@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="theme-color" content="#000000" />
+        <!-- <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" /> -->
+        <title>§</title>
+
+        <link type="text/css" rel="preload" crossorigin href="./src/styles.css" as="style">
+            <link type="text/css" rel="stylesheet" as="style" crossorigin media="all" href="./src/styles.css">
+
+    </head>
+
+    <body>
+        <!-- <noscript>
+            You need to enable JavaScript to run this app.
+        </noscript> -->
+        <div id="root"></div>
+        <script>
+            const global = window;
+            global.ReactDOM = require("react-dom");
+            global.React = require("react");
+            global.el = React.createElement;
+            global.THREE = require("three");
+            global.ReactTHREE = require("react-three-fiber")
+            require("three/examples/js/loaders/GLTFLoader")
+            global.lerp = require("lerp")
+        </script>
+        <script type="module" src="./src/index.mjs"></script>
+    </body>
+</html>

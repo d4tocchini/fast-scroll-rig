@@ -9,11 +9,11 @@
     "lerp": "1.0.3",
     "react": "d4tocchini/react.prebuilt",
     "react-dom": "d4tocchini/react-dom.prebuilt",
-    "react-scripts": "3.4.1",
     "react-three-fiber": "4.0.22",
     "three": "0.114.0"
   },
   "devDependencies": {
+    "react-scripts": "3.4.1",
     "typescript": "3.8.3"
   },
   "scripts": {
