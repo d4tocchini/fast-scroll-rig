@@ -1,5 +1,5 @@
 {
-  "name": "new",
+  "name": "three-scroll-rig",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
@@ -7,14 +7,14 @@
   "homepage": ".",
   "dependencies": {
     "lerp": "1.0.3",
-    "react": "experimental",
-    "react-dom": "experimental",
-    "react-scripts": "3.3.1",
-    "react-three-fiber": "4.0.16",
-    "three": "0.113.2"
+    "react": "d4tocchini/react.prebuilt",
+    "react-dom": "d4tocchini/react-dom.prebuilt",
+    "react-scripts": "3.4.1",
+    "react-three-fiber": "4.0.22",
+    "three": "0.114.0"
   },
   "devDependencies": {
-    "typescript": "3.3.3"
+    "typescript": "3.8.3"
   },
   "scripts": {
     "start": "react-scripts start",

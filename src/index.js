@@ -11,7 +11,6 @@ import state from "./store"
 import "./styles.css"
 
 
-
 function Startup() {
   const ref = useRef()
   useFrame(function () {
@@ -111,8 +110,7 @@ function Content() {
 
 const camera = { zoom: state.zoom, position: [0, 0, 500] }
 
-function App() {
-  console.log("App...")
+function App() {  
   const scrollArea = useRef()
   const onScroll = function (e) {
     const target = e.target
@@ -123,7 +121,7 @@ function App() {
   useEffect(() => void onScroll({ target: scrollArea.current }), [])
   return (
     <>
-      <Canvas className="canvas" concurrent pixelRatio={1} orthographic camera={camera}>
+      <Canvas className="canvas" concurrent  pixelRatio={1} orthographic camera={camera}>
         <Suspense
           fallback={<Dom center className="loading" children="Loading..." />}
         >
@@ -142,8 +140,8 @@ function App() {
   )
 }
 
-ReactDOM.render(<App />, document.getElementById("root"))
-
+// ReactDOM.render(<App />, document.getElementById("root"))
+ReactDOM.createRoot(document.getElementById("root")).render(<App />)
 
 /*
 
