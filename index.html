@@ -21,11 +21,22 @@
             const global = window;
             global.ReactDOM = require("react-dom");
             global.React = require("react");
-            global.el = React.createElement;
             global.THREE = require("three");
             global.ReactTHREE = require("react-three-fiber")
             require("three/examples/js/loaders/GLTFLoader")
             global.lerp = require("lerp")
+
+            const EMPTY_ARR = []
+            function NOOP(){}
+            function RETURN_NULL(){return null;}
+
+            const el = global.el = React.createElement;
+            const {Fragment, useEffect} = React;
+            global.els = els;
+            global.useMount = useMount;
+            function els(...children) {return el(Fragment, null, ...children);}
+            function useMount(cb) {useEffect(cb, EMPTY_ARR);}
+
         </script>
         <script type="module" src="./src/index.mjs"></script>
     </body>

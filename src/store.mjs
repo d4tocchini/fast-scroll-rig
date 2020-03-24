@@ -14,7 +14,7 @@ const state = {
     ],
     paragraphs: [
         {
-            offset: 1,
+            offset: 0,
             factor: 1.75,
             header: "District 4",
             image: "./public/photo-1515036551567-bf1198cccc35.jpeg",

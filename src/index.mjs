@@ -10,20 +10,122 @@ const { Canvas, Dom, useLoader, useFrame } = ReactTHREE;
 
 import Plane from "./components/plane.mjs"
 import { Text, MultilineText } from "./components/text.mjs"
-import Diamonds from "./diamonds/Diamonds.mjs"
+// import Diamonds from "./diamonds/Diamonds.mjs"
 import { Block, useBlock } from "./blocks.mjs"
 import state from "./store.mjs"
 // import "./styles.css"
 
 
+function App() {
+    const ref = useRef();
+
+    return els(
+        el_canvas(
+            el_load([
+                // el(Diamonds, null),
+                el(Content, null),
+                el(Startup, null)
+            ])
+        ),
+        el_scroll_target(ref)
+    );
+}
+
+
 function Startup() {
     const ref = useRef()
-    useFrame(function () {
-        ref.current.material.opacity = lerp(ref.current.material.opacity, 0, 0.025)
-    })
-    return el(Plane, { ref, color: "#0e0e0f", position: [0, 0, 200], scale: [100, 100, 1] },
+    useFrame(on_frame)
+
+    return (Startup = function() {
+        return el(Plane, { ref, color: "#0e0e0f", position: [0, 0, 200], scale: [100, 100, 1] },
         null)
+    })()
+
+    function on_frame () {
+        const opacity = lerp(ref.current.material.opacity, 0, 0.025)
+        ref.current.material.opacity = opacity
+        // if (opacity < .01)
+        //     finished()
+    }
+    // function finished() {
+    //     console.log('on_frame')
+    //     Startup = RETURN_NULL;
+    //     // on_frame = NOOP;
+    // }
 }
+
+function extract_images(list) {
+    const images = []
+    const len = list.length
+    let i = 0
+    while (i < len) {
+        images.push(list[i++].image)
+    }
+    return images;
+}
+
+function Content() {
+    const images = extract_images(state.paragraphs)
+    const textures = useLoader(TextureLoader, images);
+
+    useMemo(function () {
+        const len = textures.length
+        let i = 0
+        while (i < len)
+            textures[i++].minFilter = LinearFilter
+    }, [textures])
+
+    const { contentMaxWidth: w, canvasWidth, canvasHeight, mobile } = useBlock()
+    return els(
+        el(Block, {factor: 1, offset: 0},
+            el(Block, {factor: 1.2},
+                el(Text, {left: true, size: w * 0.08, color: "#d40749", position: [-w / 3.2, 0.5, -1]},
+                    "HELLO WORLD")
+            ),
+            el(Block, {factor: 1.0},
+                el(Dom,{position: [-w / 3.2, -w * 0.08 + 0.25, -1]},
+                    "It was the year 2076.",
+                    mobile ? el("br", null) : " ",
+                    "The substance had arrived."
+                )
+            )
+        ),
+        el(Block,{factor: 1.2, offset: 5.7},
+            el(MultilineText, {
+                top: true,
+                left: true,
+                size: w * 0.15,
+                lineHeight: w / 5,
+                position: [-w / 3.5, 0, -1],
+                color: "#2fe8c3",
+                text: "four\nzero\nzero"
+            })
+        ),
+        state.paragraphs.map((props, index) =>
+            el(Paragraph, Object.assign({},props,
+                {
+                    key: index,
+                    index: index,
+                    image: textures[index]
+                })
+            )
+        ),
+        state.stripes.map(({ offset, color, height }, index) =>
+            el(Block, {key: index, factor: -1.5, offset: offset},
+                el(Plane, {
+                    args: [50, height, 32, 32],
+                    shift: -4,
+                    color: color,
+                    rotation: [0, 0, Math.PI / 8],
+                    position: [0, 0, -10]
+                }))
+        ),
+        el(Block, {factor: 1.25, offset: 8},
+            el(Dom, {className: "bottom-left", position:[-canvasWidth/2, -canvasHeight/2, 0] },
+                "Culture is not your friend."))
+    );
+}
+
 
 function Paragraph({ image, index, offset, factor, header, aspect, text }) {
     const { contentMaxWidth: w, canvasWidth, margin, mobile } = useBlock()
@@ -86,125 +188,68 @@ function Paragraph({ image, index, offset, factor, header, aspect, text }) {
     );
 }
 
-function extract_images(list) {
-    const images = []
-    const len = list.length
-    let i = 0
-    while (i < len) {
-        images.push(list[i++].image)
-    }
-    return images;
+
+
+
+const camera = {
+    zoom: state.zoom,
+    position: [0, 0, 500]
+}
+const canvas_attrs = {
+    className: "canvas",
+    concurrent: true,
+    pixelRatio: 1,
+    orthographic: true,
+    camera: camera
 }
 
-function Content() {
-    const images = extract_images(state.paragraphs)
-    const textures = useLoader(
-        TextureLoader,
-        images // state.paragraphs.map(({ image }) => image)
+function el_canvas(child) {
+    return el(Canvas, canvas_attrs, child)
+}
+
+function el_load(children) {
+    return el(Suspense, {fallback:el_loading()}, ...children);
+}
+
+function el_loading() {
+    return el(Dom, {center: true, className: "loading", children: "Loading..."});
+}
+
+function el_scroll_target(ref) {
+    let scroll_target;
+    useMount(function ( ) {
+        _will_scroll(ref.current)}
     )
+    function onScroll (e) {_will_scroll(e.target)}
 
-    useMemo(function () {
-        const len = textures.length
-        let i = 0
-        while (i < len)
-            textures[i++].minFilter = LinearFilter
-    }, [textures])
-
-    const { contentMaxWidth: w, canvasWidth, canvasHeight, mobile } = useBlock()
-    return el(React.Fragment, null,
-        el(Block, {factor: 1, offset: 0},
-            el(Block, {factor: 1.2},
-                el(Text, {left: true, size: w * 0.08, color: "#d40749", position: [-w / 3.2, 0.5, -1]},
-                    "HELLO WORLD")
-            ),
-            el(Block, {factor: 1.0},
-                el(Dom,{position: [-w / 3.2, -w * 0.08 + 0.25, -1]},
-                    "It was the year 2076.",
-                    mobile ? el("br", null) : " ",
-                    "The substance had arrived."
-                )
-            )
-        ),
-        el(Block,{factor: 1.2, offset: 5.7},
-            el(MultilineText, {
-                top: true,
-                left: true,
-                size: w * 0.15,
-                lineHeight: w / 5,
-                position: [-w / 3.5, 0, -1],
-                color: "#2fe8c3",
-                text: "four\nzero\nzero"
-            })
-        ),
-        state.paragraphs.map((props, index) =>
-            el(Paragraph, Object.assign({},props,
-                {
-                    key: index,
-                    index: index,
-                    image: textures[index]
-                })
-            )
-        ),
-        state.stripes.map(({ offset, color, height }, index) =>
-            el(Block, {key: index, factor: -1.5, offset: offset},
-                el(Plane, {
-                    args: [50, height, 32, 32],
-                    shift: -4,
-                    color: color,
-                    rotation: [0, 0, Math.PI / 8],
-                    position: [0, 0, -10]
-                }))
-        ),
-        el(Block, {factor: 1.25, offset: 8},
-            el(Dom, {className: "bottom-left", position:[-canvasWidth/2, -canvasHeight/2, 0] },
-                "Culture is not your friend."))
-    );
-}
-
-const camera = { zoom: state.zoom, position: [0, 0, 500] }
-
-function App() {
-    const scrollArea = useRef()
-
-    const onScroll = function (e) {
-        const target = e.target
-        requestAnimationFrame(function () {
-            state.top.current = target.scrollTop;
-        });
+    function _will_scroll(target) {
+        scroll_target = target;;
+        requestAnimationFrame(_did_scroll);
     }
 
-    useEffect(() => void onScroll({ target: scrollArea.current }), [])
+    function _did_scroll() {
+        state.top.current = scroll_target.scrollTop;
+    }
 
     return (
-        el(React.Fragment, null,
-            el(Canvas, {
-                className: "canvas",
-                concurrent: true,
-                pixelRatio: 1,
-                orthographic: true,
-                camera: camera
-            },
-                el(Suspense, {fallback:
-                    el(Dom, {center: true, className: "loading", children: "Loading..."})
-                },
-                    el(Diamonds, null),
-                    el(Content, null),
-                    el(Startup, null)
-                )
-            ),
-            el("div", {className: "scrollArea", ref: scrollArea, onScroll},
-                new Array(state.sections).fill().map((_, index) =>
-                    el("div", {
-                        key: index,
-                        id: "0" + index,
-                        style: {
-                            height: `${(state.pages / state.sections) * 100}vh`
-                        }
-                    })
-                )
-            )
+        el("div", {className: "scrollArea", ref, onScroll},
+            _el_scroll_body(state.pages, state.sections)
         )
     );
+}
+
+function _el_scroll_body(page_count, section_count) {
+    const sections = [];
+    const section_height = `${(page_count / section_count) * 100}vh`;
+    const style = {height:section_height}
+    let i = 0;
+    while (i < section_count) {
+        const key = i++;
+        sections.push(
+            el("div", {key, id:`0${key}`, style})
+        )
+    }
+    return sections;
 }
 
 // ReactDOM.render(<App />, document.getElementById("root"))
