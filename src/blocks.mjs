@@ -26,10 +26,22 @@ function Block({ offset, factor, children }) {
     }
 }
 
+const BLOCK_CTX = {
+    offset: 0.0,
+    viewportWidth: 0|0,
+    viewportHeight: 0|0,
+    canvasWidth: 0.0,
+    canvasHeight: 0.0,
+    margin: 0.0,
+    contentMaxWidth: 0.0,
+    sectionHeight: 0.0,
+    offsetFactor: 0.0,
+    mobile: false,
+}
+
 function useBlock() {
     const { sections, pages, zoom } = state
     const { size, viewport } = useThree()
-    const offset = useContext(offsetContext)
     const viewportWidth = viewport.width
     const viewportHeight = viewport.height
     const canvasWidth = viewportWidth / zoom
@@ -38,20 +50,22 @@ function useBlock() {
     const margin = canvasWidth * (mobile ? 0.2 : 0.1)
     const contentMaxWidth = canvasWidth * (mobile ? 0.8 : 0.6)
     const sectionHeight = canvasHeight * ((pages - 1) / (sections - 1))
+
+    const offset = useContext(offsetContext)
     const offsetFactor = (offset + 1.0) / sections
-    return {
-        viewport,
-        offset,
-        viewportWidth,
-        viewportHeight,
-        canvasWidth,
-        canvasHeight,
-        mobile,
-        margin,
-        contentMaxWidth,
-        sectionHeight,
-        offsetFactor
-    }
+
+    BLOCK_CTX.offset = offset;
+    BLOCK_CTX.viewportWidth = viewportWidth;
+    BLOCK_CTX.viewportHeight = viewportHeight;
+    BLOCK_CTX.canvasWidth = canvasWidth;
+    BLOCK_CTX.canvasHeight = canvasHeight;
+    BLOCK_CTX.mobile = mobile;
+    BLOCK_CTX.margin = margin;
+    BLOCK_CTX.contentMaxWidth = contentMaxWidth;
+    BLOCK_CTX.sectionHeight = sectionHeight;
+    BLOCK_CTX.offsetFactor = offsetFactor;
+
+    return BLOCK_CTX;
 }
 
 export { Block, useBlock }

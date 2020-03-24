@@ -53,9 +53,10 @@ function extract_images(list) {
 }
 
 function Content() {
+    const { contentMaxWidth: w, canvasWidth, canvasHeight, mobile } = useBlock()
+
     const images = extract_images(state.paragraphs)
     const textures = useLoader(TextureLoader, images);
-
     useMemo(function () {
         const len = textures.length
         let i = 0
@@ -63,7 +64,6 @@ function Content() {
             textures[i++].minFilter = LinearFilter
     }, [textures])
 
-    const { contentMaxWidth: w, canvasWidth, canvasHeight, mobile } = useBlock()
     return els(
         el(Block, {factor: 1, offset: 0},
             el(Block, {factor: 1.2},
