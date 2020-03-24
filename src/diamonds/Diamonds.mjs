@@ -4,16 +4,14 @@ import RefractionMaterial from "./RefractionMaterial.mjs"
 import { useBlock } from "../blocks.mjs"
 import state from "../store.mjs"
 
-const {
-    WebGLRenderTarget, Object3D,
-    Color, GLTFLoader
-} = global.THREE
+const {WebGLRenderTarget, Object3D, GLTFLoader} = global.THREE
 const { useRef, useMemo } = global.React;
 const { useLoader, useThree, useFrame } = global.ReactTHREE;
 const lerp = global.lerp;
 
 const child_idx = 6;
 const dummy = new Object3D()
+
 export default function Diamonds() {
 
     const { size, gl, scene, camera, clock } = useThree()
@@ -24,21 +22,15 @@ export default function Diamonds() {
     const gltf = useLoader(GLTFLoader, "./public/piggy_bank/scene.gltf")
     // "/simple_japanese_tree/scene.gltf")
     // "/diamond.glb")
+
     useMemo(function () {
-        // console.log("xxx", gltf)
         // gltf.__$[child_idx].geometry.center()
         // gltf.scene.children[child_idx].geometry.center()
-
-
         gltf.scene.traverse(function (child) {
-            //     // console.log(child)
             if (child.geometry) {
-                // console.log('111')
                 //       // roughnessMipmapper.generateMipmaps( child.material );
                 child.geometry.center()
-
             }
-
         });
 
     }, [])
@@ -55,12 +47,10 @@ export default function Diamonds() {
         return [envFbo, backfaceFbo, backfaceMaterial, refractionMaterial]
     }, [size, ratio])
 
-    // TODO
     useFrame(function() {
 
-        scene.background = state.colors.bg;
+        scene.background = state.colors.bg; // NOTE: THREE takes care of gl.clearColor(1, 0.5, 0.5, 3);
 
-        // gl.clearColor(1, 0.5, 0.5, 3);
         _iterate_diamonds()
 
         gl.autoClear = false
@@ -87,7 +77,6 @@ export default function Diamonds() {
         gl.render(scene, camera)    // render refracted model on content layer
 
     }, 1)
-
 
 
     function _iterate_diamonds() {
@@ -120,6 +109,9 @@ export default function Diamonds() {
     }
 
     // console.log(gltf)
+                                                    // TODO: more generalized solution, see "gltf to jsx"...
+    const geom = gltf.__$[child_idx].geometry;
+    geom.attach = "geometry";                       // instead of: Object.assign({attach: "geometry"}, gltf.__$[child_idx].geometry)
 
     return (
         el("instancedMesh", {
@@ -128,7 +120,7 @@ export default function Diamonds() {
                 args: [null, null, state.diamonds.length],
                 position: [0, 0, 50]
             },
-            el("bufferGeometry", Object.assign({attach: "geometry"}, gltf.__$[child_idx].geometry), null)
+            el("bufferGeometry", geom, null)
         )
     )
 }
