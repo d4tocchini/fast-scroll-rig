@@ -5,21 +5,25 @@ import state from "./store.mjs"
 
 const offsetContext = createContext(0)
 
-function Block({ children, offset, factor, ...props }) {
-    const { offset: parentOffset, sectionHeight } = useBlock()
+function Block({ offset, factor, children }) {
     const ref = useRef()
-    offset = offset !== undefined ? offset : parentOffset
-    useFrame(() => {
+    useFrame(on_frame)
+
+    const { offset: parentOffset, sectionHeight } = useBlock();
+    offset = (offset !== undefined) ? offset : parentOffset;
+
+    return (
+        el(offsetContext.Provider, { value: offset },
+            el("group", {position: [0, -sectionHeight * offset * factor, 0]},
+                el("group", { ref },
+                    children)))
+    );
+
+    function on_frame() {
         const curY = ref.current.position.y
         const curTop = state.top.current
         ref.current.position.y = lerp(curY, (curTop / state.zoom) * factor, 0.1)
-    })
-    return (
-        el(offsetContext.Provider, { value: offset },
-            el("group", Object.assign({}, props, { position: [0, -sectionHeight * offset * factor, 0] }),
-                el("group", { ref: ref },
-                    children)))
-    );
+    }
 }
 
 function useBlock() {

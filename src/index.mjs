@@ -13,12 +13,9 @@ import { Text, MultilineText } from "./components/text.mjs"
 import Diamonds from "./diamonds/Diamonds.mjs"
 import { Block, useBlock } from "./blocks.mjs"
 import state from "./store.mjs"
-// import "./styles.css"
-
 
 function App() {
     const ref = useRef();
-
     return els(
         el_canvas(
             el_load([
@@ -31,27 +28,18 @@ function App() {
     );
 }
 
-
 function Startup() {
     const ref = useRef()
     useFrame(on_frame)
 
-    return (Startup = function() {
-        return el(Plane, { ref, color: "#0e0e0f", position: [0, 0, 200], scale: [100, 100, 1] },
-        null)
-    })()
+    return (
+        el(Plane, { ref, color: "#0e0e0f", position:[0, 0, 200], scale:[100, 100, 1] })
+    );
 
     function on_frame () {
         const opacity = lerp(ref.current.material.opacity, 0, 0.025)
         ref.current.material.opacity = opacity
-        // if (opacity < .01)
-        //     finished()
-    }
-    // function finished() {
-    //     console.log('on_frame')
-    //     Startup = RETURN_NULL;
-    //     // on_frame = NOOP;
-    // }
+    }   // if (opacity < .01) finished()
 }
 
 function extract_images(list) {
