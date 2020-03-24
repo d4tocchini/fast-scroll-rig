@@ -4,10 +4,6 @@
 
 [Demo]()
 
-## Installation
-
-	yarn
-	yarn start
 
 ## Credits
 
