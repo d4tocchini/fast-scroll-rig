@@ -10,7 +10,7 @@ const { Canvas, Dom, useLoader, useFrame } = ReactTHREE;
 
 import Plane from "./components/plane.mjs"
 import { Text, MultilineText } from "./components/text.mjs"
-// import Diamonds from "./diamonds/Diamonds.mjs"
+import Diamonds from "./diamonds/Diamonds.mjs"
 import { Block, useBlock } from "./blocks.mjs"
 import state from "./store.mjs"
 // import "./styles.css"
@@ -22,7 +22,7 @@ function App() {
     return els(
         el_canvas(
             el_load([
-                // el(Diamonds, null),
+                el(Diamonds, null),
                 el(Content, null),
                 el(Startup, null)
             ])
