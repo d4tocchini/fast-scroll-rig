@@ -1,11 +1,12 @@
 const { createRef } = global.React;
-const { Vector3 } = global.THREE;
+const { Vector3, Color } = global.THREE;
 
 const state = {
     sections: 9,
     pages: 8,
     zoom: 75,
     colors: {
+        bg: new Color("#fae0e1"), // TODO: computed / memo read-write api
         clear: [253, 227, 226],
     },
     stripes: [

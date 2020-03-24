@@ -212,7 +212,10 @@ function el_scroll_target(ref) {
 
     function _will_scroll(target) {
         scroll_target = target;;
-        requestAnimationFrame(_did_scroll);
+        _did_scroll()
+        // TODO: confirm that raf makes things slower...
+        // TODO: React is likely already in a raf loop...
+        // requestAnimationFrame(_did_scroll);
     }
 
     function _did_scroll() {
